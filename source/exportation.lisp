@@ -1,7 +1,7 @@
 (defpackage #:ck.clle.exportation
   (:use #:cl)
   (:export #:defvar* #:defparameter* #:defconstant* #:defgeneric* #:defclass* #:defun* #:defmacro*
-           #:defmethod*))
+           #:defmethod* #:export*))
 
 (in-package #:ck.clle.exportation)
 
@@ -70,3 +70,9 @@ want to be exported."
      (defmethod ,name ,lambda-list
        ,@body)
      (export ',name)))
+
+(defmacro export* (&rest source-packages)
+  "Export the public symbols of SOURCE-PACKAGES to the current package's symbol table."
+  `(dolist (source-package ',source-packages)
+     (loop for symbol being the external-symbols of source-package
+           do (export symbol ,(package-name *package*)))))
