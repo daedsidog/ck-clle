@@ -1,3 +1,5 @@
 (defsystem #:ck.clle
   :components ((:module "source" :components ((:file "exportation")
-                                              (:file "clle" :depends-on ("exportation"))))))
+                                              (:file "collections")
+                                              (:file "clle" :depends-on ("exportation"
+                                                                         "collections"))))))
