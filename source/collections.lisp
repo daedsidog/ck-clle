@@ -23,7 +23,7 @@
           finally (return uniques))))
 
 (defun* flatten (list)
-  "Flatten a LIST of sublists into a single list."
+  "Flatten a LIST with sublists into monolithic list."
   (labels ((flatten-helper (list acc)
            (cond
              ((null list) acc)
@@ -35,10 +35,10 @@
   "Return the CAR of each nonempty list in LIST."
   (check-type list list)
   ;; If we got a list, we need to collect its CAR.  Then, we continue iterating on the rest of the
-  ;; list to see if there are any more nested lists, and repeat the process.
+  ;; list to see if there are any more nested lists, ad nauseam.
   (let ((cars (iterate (for item in list)
                       (if (listp item)
-                          (collect (cars item))
+                          (collect (nreverse (cars item)))
                           (when (first-iteration-p)
                             (collect item))))))
     (flatten cars)))

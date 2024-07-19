@@ -2,4 +2,5 @@
   :components ((:module "source" :components ((:file "exportation")
                                               (:file "collections")
                                               (:file "clle" :depends-on ("exportation"
-                                                                         "collections"))))))
+                                                                         "collections")))))
+  :depends-on (#:iterate))
