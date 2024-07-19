@@ -40,15 +40,16 @@ want to be exported."
   (let* ((exports
            (apply #'append
                   (mapcar (lambda (slot-spec)
-                            (let ((should-export t))
-                              (let ((export-specifier (member :export slot-spec)))
-                                (when export-specifier
-                                  (let ((export-opt (second export-specifier)))
-                                    (unless (member export-opt '(t nil))
-                                      (error "Invalid export specifier for slot ~A in class ~A."
-                                             (first slot-spec)
-                                             name))
-                                    (setf should-export export-opt))))
+                            (let ((should-export t)
+                                  (export-specifier (member :export slot-spec)))
+                              (when export-specifier
+                                (let ((export-opt (second export-specifier)))
+                                  (when (and (not (member export-opt '(t nil)))
+                                             (cdr export-specifier))
+                                    (error "Invalid export specifier for slot ~A in class ~A."
+                                           (first slot-spec)
+                                           name))
+                                  (setf should-export export-opt)))
                               (when should-export
                                 (list
                                  (when (member :reader slot-spec)
@@ -56,15 +57,10 @@ want to be exported."
                                  (when (member :accessor slot-spec)
                                    (second (member :accessor slot-spec)))))))
                           direct-slots))))
-    (setf direct-slots
-          (mapcar (lambda (slot-spec)
-                    (remove :export
-                            (remove (second (member :export slot-spec))
-                                    slot-spec)))
-                  direct-slots))
+    (mapc (lambda (slot-spec) (remf (cdr slot-spec) :export)) direct-slots)
     (setf exports (remove nil exports))
     `(prog1
-       (defclass ,name ,direct-superclasses ,direct-slots ,@options)
+         (defclass ,name ,direct-superclasses ,direct-slots ,@options)
        (export ',name)
        ,@(mapcar (lambda (export-name)
                    `(export ',export-name))
