@@ -1,5 +1,5 @@
 (defpackage #:ck.clle.collections
-  (:use #:cl #:ck.clle.exportation #:iterate))
+  (:use #:cl #:ck.clle.symbols))
 
 (in-package #:ck.clle.collections)
 

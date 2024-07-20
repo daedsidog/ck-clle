@@ -1,9 +1,17 @@
-(defpackage #:ck.clle.exportation
+(defpackage #:ck.clle.symbols
   (:use #:cl)
-  (:export #:defvar* #:defparameter* #:defconstant* #:defgeneric* #:defclass* #:defun* #:defmacro*
-           #:defmethod* #:export*))
+  (:export #:defvar*
+           #:defparameter*
+           #:defconstant*
+           #:defgeneric*
+           #:defclass*
+           #:defun*
+           #:defmacro*
+           #:defmethod*
+           #:export*
+           #:keywordicate))
 
-(in-package #:ck.clle.exportation)
+(in-package #:ck.clle.symbols)
 
 (defmacro defvar* (name &optional (init nil init-provided-p) doc)
   "Define a global variable and export it.  Optionally provide an initial value and documentation
@@ -90,3 +98,7 @@ want to be exported."
   `(dolist (source-package ',source-packages)
      (loop for symbol being the external-symbols of source-package
            do (export symbol ,(package-name *package*)))))
+
+(defun keywordicate (symbol)
+  "Intern SYMBOL into the keyword package and return it."
+  (intern (symbol-name symbol) :keyword))
