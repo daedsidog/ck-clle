@@ -42,3 +42,16 @@
                           (when (first-iteration-p)
                             (collect item))))))
     (flatten cars)))
+
+(defun* deep-mapl (fn list)
+  "Apply FN to all sublists in LIST.
+
+Recursive version of MAPL.  Returns LIST."
+  (check-type fn function)
+  (flet ((helper (list)
+           (iterate (for item in list)
+             (when (listp item)
+               (deep-mapl fn item)
+               (mapl fn item)))))
+    (helper list))
+  list)
