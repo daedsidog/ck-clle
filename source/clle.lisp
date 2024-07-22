@@ -6,6 +6,6 @@
 
 (in-package #:ck.clle)
 
-(export* :ck.clle.symbols
+(export-inherited-symbols :ck.clle.symbols
          :ck.clle.collections
          :iterate)
