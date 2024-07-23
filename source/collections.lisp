@@ -1,11 +1,16 @@
 (defpackage #:ck.clle.collections
-  (:use #:cl #:ck.clle.symbols))
+  (:use #:cl #:ck.clle.symbols)
+  (:export #:duplicates
+           #:unique
+           #:flatten
+           #:cars
+           #:deep-mapl))
 
 (in-package #:ck.clle.collections)
 
 ;;; LIST EXTENSIONS
 
-(defun* duplicates (data-list &optional &key (test #'eq))
+(defun duplicates (data-list &optional &key (test #'eq))
   "Return a list of duplicate elements in DATA-LIST."
   (check-type data-list list)
   (let ((hash (make-hash-table :test test)))
@@ -14,7 +19,7 @@
             collect x into dupes
           finally (return dupes))))
 
-(defun* unique (data-list &optional &key (test #'eq))
+(defun unique (data-list &optional &key (test #'eq))
   "Return a list of unique elements in DATA-LIST."
   (let ((hash (make-hash-table :test test)))
     (loop for x in data-list
@@ -22,7 +27,7 @@
             collect x into uniques
           finally (return uniques))))
 
-(defun* flatten (list)
+(defun flatten (list)
   "Flatten a LIST with sublists into monolithic list."
   (labels ((flatten-helper (list acc)
            (cond
@@ -31,7 +36,7 @@
              (t (flatten-helper (car list) (flatten-helper (cdr list) acc))))))
     (nreverse (flatten-helper list nil))))
 
-(defun* cars (list)
+(defun cars (list)
   "Return the CAR of each nonempty list in LIST."
   (check-type list list)
   ;; If we got a list, we need to collect its CAR.  Then, we continue iterating on the rest of the
@@ -43,7 +48,7 @@
                             (collect item))))))
     (flatten cars)))
 
-(defun* deep-mapl (fn list)
+(defun deep-mapl (fn list)
   "Apply FN to all sublists in LIST.
 
 Recursive version of MAPL.  Returns LIST."
