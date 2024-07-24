@@ -1,9 +1,9 @@
-(defpackage #:ck.clle.symbols
+(defpackage #:ck-clle/symbols
   (:use #:cl)
   (:export #:export-inherited-symbols
            #:keywordicate))
 
-(in-package #:ck.clle.symbols)
+(in-package #:ck-clle/symbols)
 
 (defmacro export-inherited-symbols (&rest source-packages)
   "Export the external symbols inherited from SOURCE-PACKAGES to the current package's symbol table.

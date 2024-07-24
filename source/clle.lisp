@@ -1,11 +1,11 @@
-(defpackage #:ck.clle
+(defpackage #:ck-clle
   (:use #:cl
-        #:ck.clle.symbols
-        #:ck.clle.collections
+        #:ck-clle/symbols
+        #:ck-clle/collections
         #:iterate))
 
-(in-package #:ck.clle)
+(in-package #:ck-clle)
 
-(export-inherited-symbols :ck.clle.symbols
-                          :ck.clle.collections
+(export-inherited-symbols :ck-clle/symbols
+                         :ck-clle/collections
                           :iterate)

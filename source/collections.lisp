@@ -1,12 +1,12 @@
-(defpackage #:ck.clle.collections
-  (:use #:cl #:ck.clle.symbols)
+(defpackage #:ck-clle.collections
+  (:use #:cl #:ck-clle/symbols)
   (:export #:duplicates
            #:unique
            #:flatten
            #:cars
            #:deep-mapl))
 
-(in-package #:ck.clle.collections)
+(in-package #:ck-clle/collections)
 
 ;;; LIST EXTENSIONS
 
