@@ -1,5 +1,5 @@
-(defpackage #:ck-clle.collections
-  (:use #:cl #:ck-clle/symbols)
+(defpackage #:ck-clle/collections
+  (:use #:cl)
   (:export #:duplicates
            #:unique
            #:flatten
