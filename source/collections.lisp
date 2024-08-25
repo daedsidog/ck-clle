@@ -42,10 +42,10 @@
   ;; If we got a list, we need to collect its CAR.  Then, we continue iterating on the rest of the
   ;; list to see if there are any more nested lists, ad nauseam.
   (let ((cars (iterate (for item in list)
-                      (if (listp item)
-                          (collect (nreverse (cars item)))
-                          (when (first-iteration-p)
-                            (collect item))))))
+                       (if (listp item)
+                           (collect (nreverse (cars item)))
+                           (when (first-iteration-p)
+                             (collect item))))))
     (flatten cars)))
 
 (defun deep-mapl (fn list)
