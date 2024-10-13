@@ -1,16 +1,19 @@
-(uiop:define-package #:ck-clle
-  (:use #:cl)
-  (:use-reexport #:ck-clle/symbols
-                 #:ck-clle/collections
-                 #:ck-clle/types
-                 #:ck-clle/macros
-                 #:iterate))
+(defmacro define-clle (imports-and-exports)
+  `(uiop:define-package #:ck-clle
+       (:use #:cl)
+     (:use-reexport #:ck-clle/list)
+     ,@(mapcar (lambda (i&e)
+                 `(:import-from ,(car i&e)
+                                ,@(cdr i&e)))
+               imports-and-exports)
+     (:export #:atomp
+              #:nullp
+      ,@(alexandria:flatten (mapcar #'cdr imports-and-exports)))))
 
-(in-package #:iterate)
-
-;; Remove ITERATE:COUNT from the ITERATE clauses as it often clashes with CL:COUNT.  We can use the
-;; ITERATE:COUNTING clause instead.
-(remprop 'count 'synonym)
+(define-clle
+    ((#:alexandria #:with-gensyms
+                   #:when-let
+                   #:if-let)))
 
 (in-package #:ck-clle)
 
@@ -22,7 +25,4 @@
 #+sbcl
 (progn
   (sb-ext:lock-package 'ck-clle)
-  (sb-ext:lock-package 'ck-clle/symbols)
-  (sb-ext:lock-package 'ck-clle/collections)
-  (sb-ext:lock-package 'ck-clle/types)
-  (sb-ext:lock-package 'ck-clle/macros))
+  (sb-ext:lock-package 'ck-clle/list))

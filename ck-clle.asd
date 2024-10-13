@@ -1,10 +1,5 @@
 (defsystem #:ck-clle
-  :components ((:module "source" :components ((:file "symbols")
-                                              (:file "collections")
-                                              (:file "types")
-                                              (:file "macros")
-                                              (:file "clle" :depends-on ("symbols"
-                                                                         "collections"
-                                                                         "types"
-                                                                         "macros")))))
-  :depends-on ("iterate"))
+  :components ((:module "source"
+                :components ((:file "list")
+                             (:file "clle" :depends-on ("list")))))
+  :depends-on (#:alexandria))

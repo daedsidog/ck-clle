@@ -1,14 +1,13 @@
-(defpackage #:ck-clle/collections
+(defpackage #:ck-clle/list
   (:use #:cl)
-  (:export #:duplicates
+  (:import-from #:alexandria #:flatten)
+  (:export #:flatten
+           #:duplicates
            #:unique
-           #:flatten
            #:cars
            #:deep-mapl))
 
-(in-package #:ck-clle/collections)
-
-;;; LIST EXTENSIONS
+(in-package #:ck-clle/list)
 
 (defun duplicates (data-list &optional &key (test #'eq))
   "Return a list of duplicate elements in DATA-LIST."
@@ -27,15 +26,6 @@
             collect x into uniques
           finally (return uniques))))
 
-(defun flatten (list)
-  "Flatten a LIST with sublists into monolithic list."
-  (labels ((flatten-helper (list acc)
-           (cond
-             ((null list) acc)
-             ((atom (car list)) (flatten-helper (cdr list) (cons (car list) acc)))
-             (t (flatten-helper (car list) (flatten-helper (cdr list) acc))))))
-    (nreverse (flatten-helper list nil))))
-
 (defun cars (list)
   "Return the CAR of each nonempty list in LIST."
   (check-type list list)
@@ -49,9 +39,9 @@
     (flatten cars)))
 
 (defun deep-mapl (fn list)
-  "Apply FN to all sublists in LIST.
+  "Apply FN to all sublists in LIST and return LIST.
 
-Recursive version of MAPL.  Returns LIST."
+Recursive version of CL:MAPL."
   (check-type fn function)
   (flet ((helper (list)
            (iterate (for item in list)
