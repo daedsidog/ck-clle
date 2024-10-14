@@ -8,6 +8,8 @@
                imports-and-exports)
      (:export #:atomp
               #:nullp
+              #:eqp
+              #:eqlp
       ,@(alexandria:flatten (mapcar #'cdr imports-and-exports)))))
 
 (define-clle
@@ -19,8 +21,13 @@
 
 ;; Add synonyms that adhere to the convention of having predicates be posfixed with 'p'.
 ;; This should really be the default in the standard, but was not adopted due to historical reasons.
-(setf (fdefinition 'atomp) (fdefinition 'atom))
-(setf (fdefinition 'nullp) (fdefinition 'null))
+(setf (fdefinition 'atomp) (fdefinition 'cl:atom)
+      (fdefinition 'nullp) (fdefinition 'cl:null)
+      ;; We consider a predicate function to be a boolean (or generalized boolean) function which
+      ;; never throws an error.  By this definition, the following functions should also have
+      ;; suffixes.  Note that we already have EQUALP, so we do not need to alias EQUAL.
+      (fdefinition 'eqp) (fdefinition 'cl:eq)
+      (fdefinition 'eqlp) (fdefinition 'cl:eql))
 
 #+sbcl
 (progn
