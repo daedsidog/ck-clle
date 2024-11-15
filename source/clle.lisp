@@ -1,7 +1,7 @@
 (defmacro define-clle (imports-and-exports)
   `(uiop:define-package #:ck-clle
        (:use #:cl)
-     (:use-reexport #:ck-clle/list)
+     (:use-reexport #:ck-clle)
      ,@(mapcar (lambda (i&e)
                  `(:import-from ,(car i&e)
                                 ,@(cdr i&e)))
@@ -16,7 +16,8 @@
     ((#:alexandria #:with-gensyms
                    #:when-let
                    #:if-let
-                   #:iota)))
+                   #:iota)
+     (#:ck-clle/string #:string-empty-p)))
 
 (in-package #:ck-clle)
 
@@ -29,8 +30,3 @@
       ;; suffixes.  Note that we already have EQUALP, so we do not need to alias EQUAL.
       (fdefinition 'eqp) (fdefinition 'cl:eq)
       (fdefinition 'eqlp) (fdefinition 'cl:eql))
-
-#+sbcl
-(progn
-  (sb-ext:lock-package 'ck-clle)
-  (sb-ext:lock-package 'ck-clle/list))

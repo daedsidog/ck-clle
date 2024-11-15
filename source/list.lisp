@@ -28,15 +28,16 @@
 
 (defun cars (list)
   "Return the CAR of each nonempty list in LIST."
-  (check-type list list)
-  ;; If we got a list, we need to collect its CAR.  Then, we continue iterating on the rest of the
-  ;; list to see if there are any more nested lists, ad nauseam.
-  (let ((cars (iterate (for item in list)
-                       (if (listp item)
-                           (collect (nreverse (cars item)))
-                           (when (first-iteration-p)
-                             (collect item))))))
-    (flatten cars)))
+  (let ((is-first-iteration t))
+    (let ((cars (loop for item in list
+                      if (listp item)
+                        collect (nreverse (cars item)) into cars
+                      else
+                        when is-first-iteration
+                          collect item into cars
+                          and do (setf is-first-iteration nil)
+                      finally (return cars))))
+      (flatten cars))))
 
 (defun deep-mapl (fn list)
   "Apply FN to all sublists in LIST and return LIST.
