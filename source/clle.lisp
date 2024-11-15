@@ -15,7 +15,8 @@
 (define-clle
     ((#:alexandria #:with-gensyms
                    #:when-let
-                   #:if-let)))
+                   #:if-let
+                   #:iota)))
 
 (in-package #:ck-clle)
 
