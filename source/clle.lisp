@@ -6,27 +6,35 @@
                  `(:import-from ,(car i&e)
                                 ,@(cdr i&e)))
                imports-and-exports)
-     (:export #:atomp
-              #:nullp
-              #:eqp
-              #:eqlp
-      ,@(alexandria:flatten (mapcar #'cdr imports-and-exports)))))
+     (:export ,@(alexandria:flatten (mapcar #'cdr imports-and-exports)))))
 
+;; Import symbols which I believe should be available in the base package.
 (define-clle
     ((#:alexandria #:with-gensyms
                    #:when-let
+                   #:flatten
                    #:if-let
                    #:iota)
      (#:ck-clle/string #:string-empty-p)))
 
 (in-package #:ck-clle)
 
-;; Add synonyms that adhere to the convention of having predicates be posfixed with 'p'.
+(defmacro alias (alias-sym pred-sym)
+  `(progn
+     (setf (fdefinition ,alias-sym) (fdefinition ,pred-sym))
+     (export ,alias-sym)))
+
+;; Add synonyms that adhere to the convention of having predicates be posfixed with 'P'.
 ;; This should really be the default in the standard, but was not adopted due to historical reasons.
-(setf (fdefinition 'atomp) (fdefinition 'cl:atom)
-      (fdefinition 'nullp) (fdefinition 'cl:null)
-      ;; We consider a predicate function to be a boolean (or generalized boolean) function which
-      ;; never throws an error.  By this definition, the following functions should also have
-      ;; suffixes.  Note that we already have EQUALP, so we do not need to alias EQUAL.
-      (fdefinition 'eqp) (fdefinition 'cl:eq)
-      (fdefinition 'eqlp) (fdefinition 'cl:eql))
+;;
+;; Functions such as OR, AND, & NOT, are statements rather than predicates.
+;; Functions such as =, <=, STRING= are exempt from this convention because they consist of only
+;; non-alphanumeric characters.
+
+(alias 'atomp 'cl:atom)
+(alias 'nullp 'cl:null)
+
+(alias 'eqp 'cl:eq)
+(alias 'eqlp 'cl:eql)
+
+(alias 'memberp 'cl:member)
